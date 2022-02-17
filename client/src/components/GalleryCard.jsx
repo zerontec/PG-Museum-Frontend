@@ -109,7 +109,7 @@ const GalleryCard = (props) => {
                 user !== null ? !user[0]?.roles?.includes('ROLE_ADMIN') ? [
                     <Button className="detail--button" onClick={handleAddShop} type="primary" disabled={localStorage.getItem(props.id) || props?.stock === false ? true : false}><MdShoppingBasket style={{ fontSize: '18px', color: '#A3DA8D' }} />Add To Cart</Button>
                 ] : null : [
-                    <Button className="detail--button" onClick={handleAddShop} type="primary" disabled={localStorage.getItem(props.id) || props?.stock === false ? true : false}><MdShoppingBasket style={{ fontSize: '18px', color: '#A3DA8D' }} /></Button>
+                    <Button className="detail--button" onClick={handleAddShop} type="primary" disabled={localStorage.getItem(props.id) || props?.stock === false ? true : false}><MdShoppingBasket style={{ fontSize: '18px', color: '#A3DA8D' }} />Add To Cart</Button>
                 ]}
         >
             <NavLink to={`/${props.id}`} >
