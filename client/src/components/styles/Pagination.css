@@ -1,4 +1,45 @@
-.block_pagination{
+.pagination {
     display: flex;
     justify-content: center;
+    padding-bottom: 3rem;
+    padding-top: 1rem;
+}
+
+.btn-punch {
+    font-weight: bold;
+    color: #2E86C1;
+    padding: 8px 12px;
+    border: 1.5px solid #EAEDED;
+    background-color: white;
+}
+
+.btn-step {
+    font-weight: bold;
+    color: #2E86C1;
+    padding: 8px 12px;
+    border: 1.5px solid #EAEDED;
+    background-color: white;
+}
+
+.btn-unactive {
+    font-weight: bold;
+    color: #2E86C1;
+    padding: 8px 12px;;
+    border: 1.5px solid #EAEDED;
+    background-color: white;
+}
+
+.btn-unactive:hover {
+    background-color: #EAEDED;
+    color: rgb(32, 32, 32);
+}
+
+.btn-step:hover {
+    background-color: #EAEDED;
+    color: rgb(32, 32, 32);
+}
+
+.btn-punch:hover {
+    background-color: #EAEDED;
+    color: rgb(32, 32, 32);
 }
