@@ -1,107 +1,148 @@
-.contenedor{
-    width: 80%;
+.login{
+    width: 100%;
+    height: 100vh;
+    max-width: 992px;
+    margin: 0 auto;
+}
+
+.login--container {
     display: flex;
-    margin-left:70px;
-    position: absolute;
-    top: 50px;
-    left: 100px;
-    font-family: 'Secular One';
-    
+    flex-direction: column;
+    padding-top: 3rem;
+    box-sizing: border-box;
 }
-.contenedor__content{
-    
-    width:40%;
-}
-.contenedor_logo {
+
+.close--button {
     display: flex;
-    font-size: 18px;
-    
+    align-self: flex-end;
+    color: black;
 }
-.contenedor_logo > img{
-    margin:0;
+
+.logo--container {
+    display: flex;
+    align-items: center;
 }
-.contenedor_logo > div{
-    
-    position: relative;
-    top: 14px;
-    font-family: impact;
-    color: #000000a8
-    
+
+.logo--image {
+    width: 60px;
+    margin-right: 0.5rem;
 }
-.contenedor_submit{
+
+.logo--text {
+    font-family: "Poppins";
+    font-weight: bold;
+    color: rgb(99, 98, 98);
+    font-size: 20px;
+    align-self: flex-end;
+}
+
+.login--title {
+    font-family: "Poppins";
+    font-weight: bolder;
+    text-align: center;
+    color: rgb(68, 68, 68);
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.login--form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-self: center;
+}
+
+.form--input {
     display: flex;
     flex-direction: column;
 }
-/* .div_log{
-    display: flex;
-} */
-.boton_log{
-    font-size:18px;
-    background-color:#1877F2;
-    color:white;
-    height:30px;
-    width: 20%;
-    padding:3px;
-    border-radius:5px;
-    border:none;
-    margin: 20px;
-    display:  inline-flex;
-    justify-content: center;
-}
 
-.boton_log:hover{
+.login-input {
+    margin-bottom: 1.5rem;
     border: none;
-}
-.bott_google{
-    display: flex;
-    justify-content: center;
-    margin-top: 1.5rem;
-    
-}
-.log_Bix{
-    font-size:30px;
-}
-.img_page{
-    width:60%;
-    margin-top: 10.8rem;
+    padding: 7px;
+    border-radius: 3px;
+    background-color: rgb(248, 248, 248);
+    font-family: "Poppins";
+    font-weight: 600;
+    font-size: 12.5px;
+    padding-left: 1rem;
+
 }
 
-input{
-    border: 3px solid rgba(255, 255, 255, 0.623);;
-    margin-top: 15px;
-    width: 100%;
-    height:30px;
-    font-size:18px;
-    display: flex;
-    
-    
+.login-input::placeholder{
+    font-family: "Poppins";
+    font-weight: 600;
+    font-size: 12.5px;
+    padding-left: 1rem;
 }
-input:focus{
-    outline: none
+
+.login-input:focus {
+    outline: 2px solid #1e90ff;
 }
-input::placeholder{
-   color: rgba(0, 0, 0, 0.787); 
-   font-weight: bold ;
+
+.login-input-error {
+    outline: 2px solid #ff4757;
+    border-radius: 3px;
+    align-self: center;
+    padding: 7px;
+    border: none;
+    width: 400px;
+    background-color: rgb(248, 248, 248);
+    font-family: "Poppins";
+    font-weight: 600;
+    font-size: 12.5px;
+    padding-left: 1rem;
 }
-input:hover{
-    border: 3px solid rgba(58, 150, 255, 0.746);
-    border-radius:5px
+
+.form-warning {
+    color: #ff4757;
+    font-size: 13px;
+    font-weight: bold;
 }
-h1{
-    color: #787878;
-    display: flex;
-    margin-top: 10rem;
+
+.text-reset-content {
+    align-self: flex-end;
+    font-family: "Poppins";
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 3rem;
 }
-h4 > a{
-    color: #7E90FF;
-    font-family: 'Poppins';
-    font-size:18px;
-    display: flex;
-    justify-content: flex-end;
+
+.text-reset {
+    color: #1e90ff;
 }
-a {
-    text-decoration: none;
-    color: #000000;
-    margin-top: 4rem;
-    
+
+.submit--btn-fill{
+    border: none;
+    align-self: center;
+    width: 90%;
+    height: 2.5rem;
+    font-family: "Poppins";
+    font-weight: 700;
+    color: white;
+    background-color: #3742fa;
+    box-sizing: border-box;
+}
+
+.submit--btn-border {
+    border: none;
+    align-self: center;
+    width: 90%;
+    height: 2.5rem;
+    font-family: "Poppins";
+    font-weight: 700;
+    color: #3741fada;
+    border: 2px solid #3742fa;
+    background-color: rgb(247, 247, 247);
+    box-sizing: border-box;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.login-google--submit {
+    align-self: center;
+    width: 90%;
+    height: 2.5rem;
+    justify-content: center;
 }

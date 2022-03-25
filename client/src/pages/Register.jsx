@@ -1,88 +1,43 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom"
-import { BsFillXCircleFill } from "react-icons/bs";
-import validate from '../utils/validateSignUp'
+import { Link, useNavigate } from "react-router-dom"
+import { GrClose } from "react-icons/gr";
+import { useForm } from "react-hook-form";
+import logo from '../images/Logo.svg'
 import './styles/Register.css'
-import logo from '../images/logoapp.svg'
-import signUpImg from '../images/signup.svg'
 import axios from 'axios';
 
-const SignUp = () => {
+const Register = () => {
+
     let navigate = useNavigate();
+    const { register, handleSubmit, resetField, formState: { errors }, watch } = useForm();
     const url = process.env.REACT_APP_URL;
+	const routeLogin = () => { navigate('/login')}
     const [user, setUser] = useState({
-        name: '',
-        username: '',
-        email: '',
-        password: '',
-        passwordbis: '',
         image: '',
-        roles: ["user"]
     });
 
-    const [errors, setErrors] = useState({})
-
-    function onInputChange(e) {
-        e.preventDefault()
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        })
-        setErrors(validate({
-            ...user,
-            [e.target.name]: e.target.value
-        }))
-    }
-
-    function register(postUser) {
-        axios.post(`${url}/auth/signup`, postUser)
+    function onSubmit(dataUser) {
+        dataUser.roles = ['user']
+        dataUser.image = user.image
+        axios.post(`${url}/auth/signup`, dataUser)
             .catch((error) => {
-                // Falta validación específica del error o mensaje de cual fue el error
+                //* Falta validación específica del error o mensaje de cual fue el error
                 console.log(error)
             })
+        resetField('name')
+        resetField('username')
+        resetField('email')
+        resetField('password')
+        resetField('passwordbis')
+        setUser({image: ''})
+        navigate('/login');
     }
 
-    function onSubmit(e) {
-        e.preventDefault()
-        axios.get(`${url}/users/search?email=${user.email}&username=${user.username}`, user)
-            .then((response) => {
-                return response.data
-            })
-            .then(response => {
-                if (response.message) {
-                    if (response.message === "true") {
-                        if (Object.keys(errors).length === 0 && errors.constructor === Object && user.username !== '') {
-                            // e.preventDefault()
-                            register(user)
-                            alert("Successfully post user")
-                            navigate('/login');
-                        } else {
-                            alert("Missing fields in the form")
-                            // navigate('/signup');
-                        }
-                    } else if (response.message === "false") {
-                        alert("Missing fields in the form")
-                    } else {
-                        alert(response.message)
-                    }
-                } else {
-                    alert("Usuario o contraseña incorrectos...")
-                }
-
-            })
-            .catch(error => {
-                console.log(error);
-            })
-
-    }
-
-  
     function processImage(e) {
         const imageFile = e.target.files[0];
         const imageUrl = new FileReader();
         imageUrl?.readAsDataURL(imageFile)
         imageUrl.onload = (e) => {
-            console.log("e es ", e.target)
             setUser({
                 ...user,
                 image: e.target.result
@@ -90,72 +45,97 @@ const SignUp = () => {
         };
     };
 
-    console.log(user)
-
-    return (<div className='signup'>
-        <div className="signup__header">
-            <div className="signup_header--logo">
-                <img src={logo} alt="#" width="60px"></img>
-                <label className="signup_header--logo--label">Museum</label>
+return (
+    <div className='signup'>
+        <div className='signup--container'>
+            <Link to='/' className="close--button">
+                <GrClose/>
+            </Link>
+            <div className='logo--container'>
+                <img src={logo} alt="logo" className='logo--image' />
+                <div className='logo--text'>Museum</div>
             </div>
-            <div className="signup__header--link" >
-                <NavLink to="/" className="navlink" ><BsFillXCircleFill /></NavLink>
-            </div>
-        </div>
 
-        <div className='signup__body'>
-            <div className="signup__body--inputs">
+            <h1 className='signup--title'>Registrarse</h1>
 
-                <div className="signup__body--inputs--text">
-                    <h1 className="signup__inputs--text--label">Sign up </h1>
-                    <span className="signup__inputs--text--span">It's free, try it!</span>
-                </div>
-                <form onSubmit={onSubmit} className="signup__body--inputs--form">
-                    <div className="signup__body--inputs--form--item">
-                        <input onChange={onInputChange} name="name" type='text' value={user.name}
-                            placeholder='Name' />
-                    </div>
-                    {errors.name && <p className="signup__body--inputs--errors">{errors.name}</p>}
-                    <div className="signup__body--inputs--form--item">
-                        <input onChange={onInputChange} name="username" type='text' value={user.username}
-                            placeholder='Username' />
-                    </div>
-                    {errors.username && <p className="signup__body--inputs--errors">{errors.username}</p>}
-                    <div className="signup__body--inputs--form--item">
-                        <input onChange={onInputChange} name="email" type='email' value={user.email}
-                            placeholder='Email' />
-                    </div>
-                    {errors.email && <p className="signup__body--inputs--errors">{errors.email}</p>}
-                    <div className="signup__body--inputs--form--item">
-                        <input onChange={onInputChange} name="password" type='password' value={user.password}
-                            placeholder='Password' />
-                    </div>
-                    {errors.password && <p className="signup__body--inputs--errors">{errors.password}</p>}
-                    <div className="signup__body--inputs--form--item">
-                        <input onChange={onInputChange} name="passwordbis" type='password' value={user.passwordbis}
-                            placeholder='Repeat password' />
-                    </div>
-                    {errors.passwordbis && <p className="signup__body--inputs--errors">{errors.passwordbis}</p>}
-
-                    <div className="signup__body--inputs--form--item">
-                        {/* <input onChange={onInputChange} name="image" type='text' value={user.image}
-                            placeholder='Image' /> */}
-                        <input onChange={(e) => processImage(e)} name="image" type="file" accept="image/*"
-                            placeholder="Select image"
+            <form onSubmit={handleSubmit(onSubmit)} className='register--form'>
+                <div className='firstRow'>
+                    <div className='container--input'>
+                        <input 
+                            type="text"
+                            className={errors.name? 'register-input-error':'register--input'} 
+                            placeholder='Nombre'
+                            {...register("name", { required: 'Campo obligatorio'})}
                         />
+                        {errors.name && <p className='form-warning'>{errors.name.message}</p>}
                     </div>
-                    <button className="signup__body--inputs--form--submit">Sign up</button>
-                </form>
-            </div>
-            <div className="signup__body--image">
-                <img src={signUpImg} width="50%" alt="#" className="signup__body--image--image"></img>
-            </div>
 
+                    <div className="container--input">
+                        <input 
+                            type="text"
+                            className={errors.username? 'register-input-error':'register--input'} 
+                            placeholder='Usuario (tu perfil)'
+                            {...register("username", { required: 'Campo obligatorio'})}
+                        />
+                        {errors.username && <p className='form-warning'>{errors.username.message}</p>}
+                    </div>
+                </div>
+                <div className='secondRow'>
+                    <div className="container--input-width">       
+                        <input 
+                            type="text"
+                            className={errors.email? 'register-input-error':'register--input'}  
+                            placeholder='Correo'
+                            {...register("email", {required: 'Campo obligatorio', pattern: { 
+                                    value: /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/,
+                                    message: 'Correo invalidó'
+                                }}
+                            )}
+                        />
+                        {errors.email && <p className='form-warning'>{errors.email.message}</p>}
+                    </div>
+                </div>
+                <div className='threeRow'>
+                    <div className="container--input">
+                        <input 
+                            type="password"
+                            className={errors.password? 'register-input-error':'register--input'}  
+                            placeholder='Contraseña'
+                            {...register("password", { required: 'Campo obligatorio'}
+                            )}
+                        />
+                        {errors.password && <p className='form-warning'>{errors.password.message}</p>}
+                    </div>
+                    <div className="container--input">
+                        <input 
+                            type="password"
+                            className={errors.passwordbis? 'register-input-error':'register--input'}  
+                            placeholder='Repetir contraseña'
+                            {...register("passwordbis", { required: 'Campo obligatorio', validate: (val) => {
+                                if (watch('password') !== val) {
+                                    return "Contraseñas no coinciden";
+                                }
+                                }}
+                            )}
+                        />
+                        {errors.passwordbis && <p className='form-warning'>{errors.passwordbis.message}</p>} 
+                    </div>
+                </div>
+                <input
+                    onChange={(e) => processImage(e)}
+                    name="image" 
+                    type="file" 
+                    className='form-control form-control-sm'
+                    accept="image/*"
+                    placeholder="Select image"
+                />
+
+                <button className="submit--btn-fill active" type='submit'>Registrarse</button>
+                <button className="submit--btn-border active"  onClick={routeLogin}>Iniciar sesión</button>
+            </form>
         </div>
-
     </div>
-
     );
 }
 
-export default SignUp;
+export default Register;
