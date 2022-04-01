@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import logo from '../images/Logo.svg'
 import './styles/Register.css'
 import axios from 'axios';
+const url = process.env.REACT_APP_URL;
 
 const Register = () => {
 
     let navigate = useNavigate();
-    const { register, handleSubmit, resetField, formState: { errors }, watch } = useForm();
-    const url = process.env.REACT_APP_URL;
+    const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
 	const routeLogin = () => { navigate('/login')}
     const [user, setUser] = useState({
         image: '',
@@ -20,15 +20,8 @@ const Register = () => {
         dataUser.roles = ['user']
         dataUser.image = user.image
         axios.post(`${url}/auth/signup`, dataUser)
-            .catch((error) => {
-                //* Falta validación específica del error o mensaje de cual fue el error
-                console.log(error)
-            })
-        resetField('name')
-        resetField('username')
-        resetField('email')
-        resetField('password')
-        resetField('passwordbis')
+        //* FALTA UNA VALIDACION EN CASO DE QUE EL USUARIO NO SE PUEDA REGISTRAR
+        reset()
         setUser({image: ''})
         navigate('/login');
     }

@@ -1,0 +1,27 @@
+.sco{
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 88%;
+  margin-bottom: 2rem;
+}
+
+.sco--title {
+  font-family: "Poppins";
+  font-weight: bold;
+  font-size: 30px;
+  color: rgb(81, 81, 81);
+  margin-bottom: 1rem
+}
+
+.sco--components {
+  display: flex;
+  width: 100%;
+  justify-content: space-between
+}
+
+.sco--selects {
+  display: flex;
+  justify-content: space-between;
+  width: 25%
+}

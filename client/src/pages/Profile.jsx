@@ -1,4 +1,4 @@
-import './styles/Profile.css';
+import './styles/AdminProfile.css';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';

@@ -12,7 +12,7 @@ const login = process.env.REACT_APP_URL;
 
 const Login = () => {
 
-    const { register, handleSubmit, resetField, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 	let navigate = useNavigate();
 	const routeRegister = () => { navigate('/register')}
     
@@ -31,8 +31,7 @@ const Login = () => {
                 Swal.fire('Usuario no existente')
             } else {
                 localStorage.setItem('session', JSON.stringify([result]))
-                resetField('username')
-                resetField('password')
+                reset()
                 window.location.href = '/'
             }
         })

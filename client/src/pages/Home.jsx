@@ -1,77 +1,62 @@
 import React, { useEffect, useState } from 'react'
-import TopBar from '../components/TopBar'
+import NavBar from '../components/NavBar'
 import Landing from '../components/Landing'
-import './styles/Home.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllGallery } from '../redux/actions/galleryActions'
+import Categories from '../components/SCO';
+import ArtworkCard from '../components/ArtworkCard'
 import Pagination from '../components/Pagination'
-import Categories from '../components/Categories';
-import image from '../images/undraw_page_not_found_re_e9o6.svg'
-import GalleryCard from '../components/GalleryCard'
-import { postProducts, totalProduct } from '../redux/actions/allProductsActions'
-import {MdOutlineHourglassDisabled} from 'react-icons/md'
+import { useSelector, useDispatch } from 'react-redux'
+import { getAllGallery } from '../redux/actions/galleryActions'
+import { Spin } from 'antd';
+import 'antd/dist/antd.min.css'
+import './styles/Home.css'
 
 const Home = () => {
 
     const dispatch = useDispatch()
-    const { allGallery } = useSelector(state => state.galleryReducer)
-    const filterId = useSelector(state => state.galleryReducer.filterId);
+    const { allGallery, filteredGallery } = useSelector(state => state.galleryReducer)
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(12);
-    const [gallery, setgallery] = useState([]);
-    // Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentGalleries = allGallery.slice(indexOfFirstPost, indexOfLastPost);
+    const postsPerPage = 12;
+    const renderGallery = filteredGallery?.length > 0 ? filteredGallery : allGallery
+    const currentArtwork = filteredGallery?.length > 0 ? filteredGallery.length : allGallery.length
+    const total = Math.ceil(currentArtwork / postsPerPage);
 
-    // Change page
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-
-    // console.log("filterId in home", filterId)
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+    };
 
     useEffect(() => {
         dispatch(getAllGallery())
-        //activa nuevo render de la página con allGallery ordenado
-        if (allGallery !== gallery) {
-            setgallery(allGallery)
-        }
+    }, [dispatch])
 
-    }, [dispatch, gallery])
 
-    return (<div className='home'>
-        <TopBar />
-        <Landing />
-        <Categories setCurrentPage={setCurrentPage} />
-        {
-            currentGalleries.length === 0 ?
-                <div className='home--validation'>
-                    <MdOutlineHourglassDisabled className='home--notfound'/>
-                    <label>Not avalaible</label>
+return (
+    <div className='home'>
+        <NavBar/>
+        <div className='home--container'>
+            <Landing/>
+            <Categories setCurrentPage={setCurrentPage}/>
+            {
+                renderGallery?.length === 0 ?
+                <div className='loading'>
+                    <Spin tip="Loading" size='large'/> 
                 </div> :
-                <div className='galleryGrid'>
+                <div className='grid--gallery'>
                     {
-
-                        currentGalleries.map(art => {
-                            if (art.stock === true) {
-                                return <GalleryCard img={art.images} title={art.title.length > 20 ? art.title.slice(0, 30) + "..." : art.title}
-                                    price={art.price} id={art.id} key={art.id} />
-
-                            } else {
-                                return <GalleryCard className='galleryCardSold' img={art.images}
-                                    price={0} id={art.id} key={art.id} stock={art.stock} />
-                            }
-
-
-                        })
+                        renderGallery?.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage).map(art => (
+                            <ArtworkCard 
+                                img={art.images} 
+                                title={art.title.length > 20 ? art.title.slice(0, 30) + "..." : art.title}
+                                price={art.price} 
+                                id={art.id} 
+                                key={art.id}
+                            />
+                        )) 
                     }
                 </div>
-        }
-        <Pagination
-            currentPage={currentPage}
-            postsPerPage={postsPerPage}
-            totalPosts={allGallery.length}
-            paginate={paginate} />
+            }
+            <Pagination total={total} handlePageChange={handlePageChange} currentPage={currentPage}/>
+        </div>
     </div>);
 }
 

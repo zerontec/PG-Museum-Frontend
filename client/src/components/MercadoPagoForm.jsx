@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import useScript from "./useScript";
-import { formConfig } from "./formConfig";
+import useScript from "../utils/useScript";
+import { formConfig } from "../utils/formConfig";
 import Card from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import { useLocation } from "react-router-dom"

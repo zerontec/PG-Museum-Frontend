@@ -1,9 +1,8 @@
-import { GET_ALL_GALLERY, GET_FIND_GALLERY, CATEGORIES, SORT_GALLERY, TYPES, GET_GALLERY_ID } from '../types'
+import { GET_ALL_GALLERY, GET_FIND_GALLERY, FILTER_SORT_GALLERY, TYPES_GALLERY} from '../types'
 
 const initialState = {
-  filterId:[],
   allGallery: [],
-  types: []
+  filteredGallery: []
 }
 
 export default function galleryReducer(state = initialState, action) {
@@ -14,44 +13,86 @@ export default function galleryReducer(state = initialState, action) {
         ...state,
         allGallery: action.payload
       }
-    
-    case GET_GALLERY_ID:
-      return {
-        ...state,
-        filterId: action.payload
-      }
-  
-
     case GET_FIND_GALLERY:
       return {
         ...state,
         allGallery: action.payload
       }
-    case TYPES:
+    case TYPES_GALLERY:
       return {
         ...state,
         types: action.payload
       }
 
-    case CATEGORIES:
-      const [data, category] = action.payload
-      //console.log(action.payload)
-      let artworks = data;
-      artworks = artworks.filter(art => {
-        if (art && art.types && art.types[0]) {
-          return art.types[0]?.type.toLowerCase().includes(category.toLowerCase())
+    case FILTER_SORT_GALLERY:
+
+      let filterSort;
+
+      if (action.payload.category && !action.payload.sort) {
+        filterSort = state.allGallery.filter(art => {
+          if (art && art.types && art.types[0]) {
+            return art.types[0]?.type.toLowerCase().includes(action.payload.category.toLowerCase())
+          }
+        })
+      } else if (!action.payload.category && action.payload.sort) {
+        switch (action.payload.sort) {
+          case 'AtoZ':
+            filterSort = state.allGallery.sort((a, b) => {
+              if (a.title.toLowerCase() > b.title.toLowerCase()) return 1
+              if (a.title.toLowerCase() < b.title.toLowerCase()) return -1
+              return 0
+            })
+            break; 
+
+          case 'ZtoA':
+            filterSort = state.allGallery.sort((a, b) => {
+              if (a.title.toLowerCase() < b.title.toLowerCase()) return 1
+              if (a.title.toLowerCase() > b.title.toLowerCase()) return -1
+              return 0
+            })
+          break;
+          default: 
+          break;
         }
-      })
+      } else if (action.payload.category && action.payload.sort) {
+        switch (action.payload.sort) {
+          case 'AtoZ':
+            let filterGalleyASC = state.allGallery.filter(art => {
+              if (art && art.types && art.types[0]) {
+                return art.types[0]?.type.toLowerCase().includes(action.payload.category.toLowerCase())
+              }
+            })
+            filterSort = filterGalleyASC.sort((a, b) => {
+              if (a.title.toLowerCase() > b.title.toLowerCase()) return 1
+              if (a.title.toLowerCase() < b.title.toLowerCase()) return -1
+              return 0
+            })
+            break; 
+
+          case 'ZtoA':
+            let filterGalleyDESC = state.allGallery.filter(art => {
+              if (art && art.types && art.types[0]) {
+                return art.types[0]?.type.toLowerCase().includes(action.payload.category.toLowerCase())
+              }
+            })
+            filterSort = filterGalleyDESC.sort((a, b) => {
+              if (a.title.toLowerCase() < b.title.toLowerCase()) return 1
+              if (a.title.toLowerCase() > b.title.toLowerCase()) return -1
+              return 0
+            })
+          break;
+          default: 
+          break;
+        }
+      } else {
+        filterSort = []
+      }
+
       return {
         ...state,
-        allGallery: artworks
+        filteredGallery: filterSort
       }
-    case SORT_GALLERY:
-      //actualiza allGallery con su versión ordenada alfabeticamente
-      return {
-        ...state,
-        allGallery: action.payload
-      }
+      
     default:
       return state;
   }

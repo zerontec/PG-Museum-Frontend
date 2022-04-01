@@ -1,4 +1,4 @@
-import { GET_ALL_GALLERY, GET_FIND_GALLERY, CATEGORIES, SORT_GALLERY, TYPES, GET_GALLERY_ID } from '../types'
+import { GET_ALL_GALLERY, GET_FIND_GALLERY, FILTER_SORT_GALLERY, TYPES_GALLERY, GET_GALLERY_ID } from '../types'
 import axios from 'axios'
 const url = process.env.REACT_APP_URL
 
@@ -14,17 +14,17 @@ export const getAllGallery = () => {
     }
 }
 
-export const getGalleryById = (id) => {
-    return async function dispatch(dispatch) {
-        const response = await fetch(`${url}/artwork/${id}`);
-        const json = await response.json();
+// export const getGalleryById = (id) => {
+//     return async function dispatch(dispatch) {
+//         const response = await fetch(`${url}/artwork/${id}`);
+//         const json = await response.json();
 
-        dispatch({
-            type: GET_GALLERY_ID,
-            payload: json
-        });
-    }
-}
+//         dispatch({
+//             type: GET_GALLERY_ID,
+//             payload: json
+//         });
+//     }
+// }
 
 //searches artwork by name - busca pieza de arte por nombre
 export const getFindGallery = (input) => {
@@ -38,33 +38,22 @@ export const getFindGallery = (input) => {
     }
 }
 
-export function categories(category) {
-    return async function dispatch(dispatch) {
-        const response = await fetch(`${url}/artwork/all`);
-        const json = await response.json();
-        dispatch({
-            type: CATEGORIES,
-            payload: [json, category]
-        });
-    }
-}
 export function categoriesTypes() {
     return async function dispatch(dispatch) {
         const response = await axios.get(`${url}/types`);
         const json = await response.data;
         dispatch({
-            type: TYPES,
+            type: TYPES_GALLERY,
             payload: json
         });
     }
 }
 
-
-
-//manda allGallery ordenado al reducer para actualizar el store
-export function sortGallery(sortedGallery) {
-    return {
-        type: SORT_GALLERY,
-        payload: sortedGallery
+export function filterAndSort(category, sort) {
+    return function (dispatch) {
+        dispatch({
+            type: FILTER_SORT_GALLERY,
+            payload: {category, sort}
+        });
     }
 }
